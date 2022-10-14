@@ -1,5 +1,5 @@
 # Description:
-  # This playbook will copy single save file from local to remote server
+  # This playbook will copy single PTF from local to remote server
   # It will create backup if save file already exists
   # 
   # Reference: https://ibm.github.io/ansible-for-i/modules/ibmi_copy.html
@@ -23,7 +23,7 @@
     lib_name: "{{ lib_name | default(QGPL) }}"
 
   tasks:
-    - name: Copy the list of PTFs from local to remote server
+    - name: Copy single PTF from local to remote server
       ibmi_copy:
         src: "{{ save_file }}"
         lib_name: "{{ lib_name }}"
