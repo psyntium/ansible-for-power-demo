@@ -29,6 +29,7 @@
       include_role:
         name: load_ptf
       register: results
+      ignore_errors: yes
 
     - name: results
       debug:
