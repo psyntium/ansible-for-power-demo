@@ -1,0 +1,48 @@
+# Description:
+  # This playbook will copy the list of PTFs from local to remote server
+  # It will create backup if save file already exists
+  # 
+  # Reference: https://ibm.github.io/ansible-for-i/modules/ibmi_copy.html
+
+# Parameters:
+  # base_dir   -- str  -- append save file path to base directory for full save file path
+  # save_files -- list -- List of local path to save files to copy to the remote server
+  #                       This can be absolute or relative.
+  # lib_name   -- str  -- Remote library where the save file should be copied to. Defaults to QGPL
+
+# Sample:
+  # base_dir: /tmp/repos/ibmi/
+  # save_files:
+  #   - SI70544.savf
+  #   - SI70931.savf
+  #   - SI72305.savf
+  #   - SI71691.savf
+  # lib_name: QGPL
+
+---
+- hosts: all
+  gather_facts: false
+  collections:
+   - ibm.power_ibmi
+  
+  vars:
+    base_dir: "{{ base_dir | default() }}"
+    save_files: "{{ save_files | default([]) }}"
+    lib_name: "{{ lib_name | default(QGPL) }}"
+
+  tasks:
+    - name: Copy the list of PTFs from local to remote server
+      ibmi_copy:
+        src: "{{ base_dir }}{{ save_file }}"
+        lib_name: "{{ lib_name }}"
+        force: True
+        backup: True
+      register: results
+      loop: '{{ save_files }}'
+      loop_control:
+        loop_var: save_file
+
+    - name: results
+      debug:
+        msg: "{{ results }}"
+        
