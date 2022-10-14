@@ -38,6 +38,7 @@
         force: True
         backup: True
       register: results
+      ignore_errors: yes
       loop: '{{ save_files }}'
       loop_control:
         loop_var: save_file
