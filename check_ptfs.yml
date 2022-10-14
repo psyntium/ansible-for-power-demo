@@ -1,7 +1,3 @@
----
-# 
-
-
 # Description:
   # This playbook will check PTFs status according to given PTF list, and returned
   # all the PTFs info, status, not loaded PTF list and already loaded PTF list
@@ -19,8 +15,6 @@
   #   - {'ptf_id':'SI71691', 'product_id':'5770SS1', 'savf_name':'QSI71691'}
 
 ---
-
-
 - name: IBM i check a set of PTFs
   hosts: all
   collections:
