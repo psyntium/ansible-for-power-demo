@@ -1,6 +1,26 @@
 ---
-# Check ptfs status according to given ptfs list, and returned all the ptfs info, status, not loaded ptfs list and already loaded ptfs list
-# Reference: https://github.com/IBM/ansible-for-i/tree/devel/roles/check_ptf
+# 
+
+
+# Description:
+  # This playbook will check PTFs status according to given PTF list, and returned
+  # all the PTFs info, status, not loaded PTF list and already loaded PTF list
+  #
+  # Reference: https://github.com/IBM/ansible-for-i/tree/devel/roles/check_ptf
+
+# Parameters:
+  # check_ptf_list -- List of PTFs
+
+# Sample:
+  # check_ptf_list:
+  #   - {'ptf_id':'SI70544', 'product_id':'5770SS1', 'savf_name':'QSI70544'}
+  #   - {'ptf_id':'SI70931', 'product_id':'5770SS1', 'savf_name':'QSI70931'}
+  #   - {'ptf_id':'SI72305', 'product_id':'5770SS1', 'savf_name':'QSI72305'}
+  #   - {'ptf_id':'SI71691', 'product_id':'5770SS1', 'savf_name':'QSI71691'}
+
+---
+
+
 - name: IBM i check a set of PTFs
   hosts: all
   collections:
