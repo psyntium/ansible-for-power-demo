@@ -5,14 +5,15 @@
   # Reference: https://github.com/IBM/ansible-for-i/tree/devel/roles/check_ptf
 
 # Parameters:
-  # check_ptf_list -- List of PTFs
+  # check_ptf_list -- list -- PTF list will be checked. ptf_id is required. product and release are required
+  #                           if check_product is true and PTF does not exist.
 
 # Sample:
   # check_ptf_list:
-  #   - {'ptf_id':'SI70544', 'product_id':'5770SS1', 'savf_name':'QSI70544'}
-  #   - {'ptf_id':'SI70931', 'product_id':'5770SS1', 'savf_name':'QSI70931'}
-  #   - {'ptf_id':'SI72305', 'product_id':'5770SS1', 'savf_name':'QSI72305'}
-  #   - {'ptf_id':'SI71691', 'product_id':'5770SS1', 'savf_name':'QSI71691'}
+  #   - {'ptf_id':'SI70544', 'product':'5770SS1', 'release': 'V7R4M0'}
+  #   - {'ptf_id':'SI70931', 'product':'5770SS1', 'release': 'V7R4M0'}
+  #   - {'ptf_id':'SI72305', 'product':'5770SS1', 'release': 'V7R4M0'}
+  #   - {'ptf_id':'SI71691', 'product':'5770SS1', 'release': 'V7R4M0'}
 
 ---
 - name: IBM i check a set of PTFs
@@ -23,10 +24,6 @@
 
   vars:
     check_ptf_list: "{{ check_ptf_list }}"
-#       - {'ptf_id':'SI70544', 'product_id':'5770SS1', 'savf_name':'QSI70544'}
-#       - {'ptf_id':'SI70931', 'product_id':'5770SS1', 'savf_name':'QSI70931'}
-#       - {'ptf_id':'SI72305', 'product_id':'5770SS1', 'savf_name':'QSI72305'}
-#       - {'ptf_id':'SI71691', 'product_id':'5770SS1', 'savf_name':'QSI71691'}
 
   tasks:
     - name: Check PTFs status
