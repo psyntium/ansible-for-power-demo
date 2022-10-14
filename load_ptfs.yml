@@ -1,0 +1,36 @@
+# Description:
+  # This playbook will load a list of PTFs and return PTFs' loaded status.
+  # 
+  # Reference: https://github.com/IBM/ansible-for-i/tree/devel/roles/load_ptf
+
+# Parameters:
+  # to_be_loaded_list -- list -- list of PTFs to be loaded
+  # remote_lib        -- str  -- Remote library where the PTFs will be loaded from. Defaults to QGPL
+
+# Sample:
+  # to_be_loaded_list:
+  #   - {'ptf_id':'SI73543', 'product':'5770UME', 'file_name':'SI73543.FILE'}
+  #   - {'ptf_id':'SI73430', 'product':'5733SC1', 'file_name':'SI73430.FILE'}
+  # remote_lib: QGPL
+
+---
+- name: Load a list of PTFs
+- hosts: all
+  gather_facts: false
+  collections:
+   - ibm.power_ibmi
+  
+  vars:
+    to_be_loaded_list: "{{ to_be_loaded_list | default([]) }}"
+    remote_lib: "{{ remote_lib | default(QGPL) }}"
+
+  tasks:
+    - name: Load a list of PTFs
+      include_role:
+        name: load_ptf
+      register: results
+
+    - name: results
+      debug:
+        msg: "{{ results }}"
+        
