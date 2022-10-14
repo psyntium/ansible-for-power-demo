@@ -16,7 +16,7 @@
   #                                  The default value is false.
   
 # Sample:
-  # to_be_loaded_list:
+  # to_be_applied_list:
   #   - {'ptf_id':'SI73543', 'product':'5770UME'}
   #   - {'ptf_id':'SI73430', 'product':'5733SC1'}
   # apply_all_loaded_ptfs: False
