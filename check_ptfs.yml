@@ -1,0 +1,39 @@
+---
+# Check ptfs status according to given ptfs list, and returned all the ptfs info, status, not loaded ptfs list and already loaded ptfs list
+# Reference: https://github.com/IBM/ansible-for-i/tree/devel/roles/check_ptf
+- name: IBM i check a set of PTFs
+  hosts: all
+  collections:
+   - ibm.power_ibmi
+
+  vars:
+    check_ptf_list: "{{ check_ptf_list }}"
+#       - {'ptf_number':'SI70544', 'product_id':'5770SS1', 'savf_name':'QSI70544'}
+#       - {'ptf_number':'SI70931', 'product_id':'5770SS1', 'savf_name':'QSI70931'}
+#       - {'ptf_number':'SI72305', 'product_id':'5770SS1', 'savf_name':'QSI72305'}
+#       - {'ptf_number':'SI71691', 'product_id':'5770SS1', 'savf_name':'QSI71691'}
+
+  tasks:
+    - name: Check PTFs status
+      include_role:
+        name: check_ptf
+
+    - name: Print PTFs status
+      debug:
+        msg: 'PTFs info: {{ ptfs_info }}'
+
+    - name: Print PTFs status
+      debug:
+        msg: 'ptfs status: {{ ptfs_status }}'
+
+    - name: Print PTFs that are not loaded
+      debug:
+        msg: "To be loaded PTF list: {{ not_loaded_ptfs_list }}"
+
+    - name: Print loaded PTFs
+      debug:
+        msg: "Already loaded PTF list: {{ loaded_ptfs_list }}"
+
+    - name: Print PTFs product not installed
+      debug:
+        msg: "Product not installed PTF list: {{ product_not_installed_ptfs }}"
