@@ -17,6 +17,7 @@
 ---
 - name: IBM i check a set of PTFs
   hosts: all
+  gather_facts: false
   collections:
    - ibm.power_ibmi
 
