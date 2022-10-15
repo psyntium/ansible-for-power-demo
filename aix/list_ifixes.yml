@@ -18,7 +18,12 @@
   vars: 
 
   tasks:
-  - name: List interim fixes on the system
-    emgr:
-      action: list
-    become: yes
+    - name: List interim fixes on the system
+      emgr:
+        action: list
+      become: yes
+      register: results
+
+    - name: results
+      debug:
+        msg: "{{ results }}"
