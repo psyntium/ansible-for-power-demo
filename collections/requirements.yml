@@ -1,0 +1,4 @@
+---
+collections:
+- ibm.power_ibmi
+- ibm.power_aix
