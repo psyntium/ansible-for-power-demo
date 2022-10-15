@@ -25,7 +25,7 @@
 
   tasks:
     - name: Copy the list of iFixes from local to remote server
-      ibmi_copy:
+      copy:
         src: "{{ base_dir }}{{ ifix_file }}"
         dest: "{{ inst_dir }}"
         force: yes
