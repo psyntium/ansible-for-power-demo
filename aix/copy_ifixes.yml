@@ -1,0 +1,42 @@
+# Description:
+  # This playbook will copy the list of iFixes from local to remote server
+
+# Parameters:
+  # base_dir   -- str  -- append save file path to base directory for full save file path
+  # ifix_files -- list -- List of local path to save files to copy to the remote server
+  #                       This can be absolute or relative.
+  # inst_dir   -- str  -- Remote directory where the ifix files should be copied to. Defaults to /usr/sys/inst.images
+
+# Sample:
+  # base_dir: /tmp/repos/aix/
+  # ifix_files:
+  #   - IJ30108s1a.210205.AIX72TL05SP00-01.epkg.Z
+  #   - IJ30808s1a.210212.AIX72TL05SP00-01.epkg.Z
+  # inst_dir: /usr/sys/inst.images
+
+---
+- hosts: all
+  gather_facts: false
+  
+  vars:
+    base_dir: "{{ base_dir | default() }}"
+    ifix_files: "{{ ifix_files | default([]) }}"
+    inst_dir: "{{ lib_name | default(/usr/sys/inst.images) }}"
+
+  tasks:
+    - name: Copy the list of iFixes from local to remote server
+      ibmi_copy:
+        src: "{{ base_dir }}{{ ifix_file }}"
+        dest: "{{ inst_dir }}"
+        force: yes
+        backup: yes
+      register: results
+      ignore_errors: yes
+      loop: '{{ ifix_files }}'
+      loop_control:
+        loop_var: ifix_file
+
+    - name: results
+      debug:
+        msg: "{{ results }}"
+        
