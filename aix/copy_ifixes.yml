@@ -30,6 +30,7 @@
         dest: "{{ inst_dir }}"
         force: yes
         backup: yes
+      become: yes
       register: results
       ignore_errors: yes
       loop: '{{ ifix_files }}'
