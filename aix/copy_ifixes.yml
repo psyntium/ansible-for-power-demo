@@ -1,5 +1,5 @@
 # Description:
-  # This playbook will copy the list of iFixes from local to remote server
+  # This playbook will copy the list of ifixes from local to remote server
 
 # Parameters:
   # base_dir   -- str  -- append save file path to base directory for full save file path
@@ -24,7 +24,7 @@
     inst_dir: "{{ inst_dir | default(/usr/sys/inst.images) }}"
 
   tasks:
-    - name: Copy the list of iFixes from local to remote server
+    - name: Copy the list of ifixes from local to remote server
       copy:
         src: "{{ base_dir }}{{ ifix_file }}"
         dest: "{{ inst_dir }}"

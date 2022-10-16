@@ -1,6 +1,6 @@
 
 # Description:
-  # This playbook will list interim fixes (ifix) on the system
+  # This playbook will all list interim fixes (ifix) on the system
   # 
   # Reference: https://ibm.github.io/ansible-power-aix/modules/emgr.html
 
@@ -9,7 +9,7 @@
 # Sample:
 
 ---
-- name: List interim fixes (ifix) on the system
+- name: List all interim fixes (ifix) on the system
   hosts: all
   gather_facts: false
   collections:
@@ -18,7 +18,7 @@
   vars: 
 
   tasks:
-    - name: List interim fixes (ifix) on the system
+    - name: List all interim fixes (ifix) on the system
       emgr:
         action: list
       become: yes
