@@ -27,7 +27,7 @@
     - name: Install list of ifix packages on the system
       emgr:
         action: install
-        ifix_package: {{ base_dir }}{{ ifix_file }}
+        ifix_package: "{{ base_dir }}{{ ifix_file }}"
         working_dir: /usr/sys/inst.images
         from_epkg: yes
         extend_fs: yes
