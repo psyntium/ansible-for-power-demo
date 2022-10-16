@@ -1,0 +1,42 @@
+
+# Description:
+  # This playbook will install list of ifix packages on the system
+  # 
+  # Reference: https://ibm.github.io/ansible-power-aix/modules/emgr.html
+
+# Parameters:
+  
+# Sample:
+  # base_dir: /usr/sys/inst.images
+  # ifix_files:
+  #   - IJ30808s1a.210212.AIX72TL05SP00-01.epkg.Z
+  #   - IJ30108s1a.210205.AIX72TL05SP00-01.epkg.Z
+
+---
+- name:  Install list of ifix packages on the system
+  hosts: all
+  gather_facts: false
+  collections:
+   - ibm.power_aix
+  
+  vars:
+    base_dir: "{{ base_dir | default() }}"
+    ifix_files: "{{ ifix_files | default([]) }}"
+
+  tasks:
+    - name: Install list of ifix packages on the system
+      emgr:
+        action: install
+        ifix_package: {{ base_dir }}{{ ifix_file }}
+        working_dir: /usr/sys/inst.images
+        from_epkg: yes
+        extend_fs: yes
+      register: results
+      ignore_errors: yes
+      loop: '{{ ifix_files }}'
+      loop_control:
+        loop_var: ifix_file
+
+    - name: results
+      debug:
+        msg: "{{ results }}"
