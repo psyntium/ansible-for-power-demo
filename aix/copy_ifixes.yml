@@ -21,7 +21,7 @@
   vars:
     base_dir: "{{ base_dir | default() }}"
     ifix_files: "{{ ifix_files | default([]) }}"
-    inst_dir: "{{ lib_name | default(/usr/sys/inst.images) }}"
+    inst_dir: "{{ inst_dir | default(/usr/sys/inst.images) }}"
 
   tasks:
     - name: Copy the list of iFixes from local to remote server
