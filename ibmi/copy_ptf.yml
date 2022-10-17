@@ -27,8 +27,8 @@
       ibmi_copy:
         src: "{{ save_file }}"
         lib_name: "{{ lib_name }}"
-        force: True
-        backup: True
+        force: yes
+        backup: yes
       register: results
       ignore_errors: yes
 
