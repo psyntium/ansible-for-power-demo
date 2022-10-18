@@ -1,0 +1,43 @@
+# Description:
+  # This playbook will copy the list of virtual images from local to remote server
+  # It will create backup if virtual images already exists
+
+# Parameters:
+  # base_dir  -- str  -- append virtual images path to base directory for full path
+  # bin_files -- list -- List of local path to virtual images to copy to the remote server
+  #                      This can be absolute or relative.
+  # dest      -- str  -- Remote destination where the virtual images will be copied to
+
+# Sample:
+  # base_dir: /tmp/repos/ibmi/
+  # bin_files:
+  #   - 41807636.bin
+  #   - 41807638.bin
+  # dest: /tmp
+
+---
+- hosts: all
+  gather_facts: false
+  
+  vars:
+    base_dir: "{{ base_dir | default() }}"
+    bin_files: "{{ bin_files | default([]) }}"
+    dest: "{{ dest | default(/tmp) }}"
+
+  tasks:
+    - name: Copy the list of virtual images from local to remote server
+      ibmi_copy:
+        src: "{{ base_dir }}{{ bin_file }}"
+        dest: "{{ dest }}"
+        force: yes
+        backup: yes
+      register: results
+      ignore_errors: yes
+      loop: '{{ bin_files }}'
+      loop_control:
+        loop_var: bin_file
+
+    - name: results
+      debug:
+        msg: "{{ results }}"
+        
