@@ -1,0 +1,19 @@
+---
+- name: Unconditionally reboot the machine with all defaults
+  hosts: all
+  gather_facts: false
+  collections:
+   - ibm.power_ibmi
+  
+  vars:
+
+  tasks:
+    - name: Unconditionally reboot the machine with all defaults
+      ibm.power_ibmi.ibmi_reboot:
+      register: results
+      ignore_errors: yes
+
+    - name: results
+      debug:
+        msg: "{{ results }}"
+        
