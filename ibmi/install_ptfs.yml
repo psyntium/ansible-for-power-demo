@@ -24,16 +24,16 @@
   
 # Sample:
   # product_id:
-  #   - 5733SC1
+  #     - 5733SC1
   # src: /tmp
-  # apply_type: *DLYALL
+  # apply_type: '*DLYALL'
   # hiper_only: False
   # use_temp_path: True
   # rollback: True
   # virtual_image_name_list:
-  #   - S2018V01.BIN
+  #     - S2018V01.BIN
   # fix_omit_list:
-  #   - 5733SC1: SI70819
+  #     - 5733SC1: SI70819
 
 ---
 - name: Install a list of PTFs from image catalog
