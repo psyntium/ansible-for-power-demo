@@ -1,0 +1,71 @@
+# Description:
+  # This playbook will install fixes such as PTF, PTF Group, Technology refresh
+  # to the target IBM i system by image catalog.
+  # 
+  # Reference: https://ibm.github.io/ansible-for-i/modules/ibmi_fix_imgclg.html
+
+# Parameters:
+  # apply_type              -- str  -- The fix apply type of the install to perform.
+  # fix_omit_list           -- list -- The list of PTFs that will be omitted.
+  #                                    The key of the dict should be the product ID of the fix that is omitted.
+  # hiper_only              -- bool -- Whether or not only install the hiper fixes.
+  #                                    Specify true if only need to install hiper fixes.
+  # product_id              -- str  -- The product ID of the fixes to be installed.
+  #                                    Default value is ['*ALL'].
+  # rollback                -- bool -- Whether or not rollback if there’s failure during the installation of the fixes
+  #                                    Default value is True.
+  # src                     -- str  -- The path on the target IBM i system where the fix installation file is located.
+  #                                    The path is an IFS directory format.
+  #                                    Default value is /tmp.
+  # use_temp_path           -- bool -- Whether or not to copy the installation file to a temp path.
+  #                                    Default value is True.
+  # virtual_image_name_list -- list -- The name list of the installation file.
+  #                                    Default value is ['*ALL'].
+  
+# Sample:
+  # product_id:
+  #   - 5733SC1
+  # src: /tmp
+  # apply_type: *DLYALL
+  # hiper_only: False
+  # use_temp_path: True
+  # rollback: True
+  # virtual_image_name_list:
+  #   - S2018V01.BIN
+  # fix_omit_list:
+  #   - 5733SC1: SI70819
+
+---
+- name: Install a list of PTFs from image catalog
+  hosts: all
+  gather_facts: false
+  collections:
+   - ibm.power_ibmi
+  
+  vars:
+    product_id: "{{ product_id | default(['*ALL']) }}"
+    src: "{{ src | default(/tmp) }}"
+    apply_type: "{{ apply_type | default(*DLYALL) }}"
+    hiper_only: "{{ hiper_only | default(False) }}"
+    rollback: "{{ rollback | default(*True) }}"
+    use_temp_path: "{{ use_temp_path | default(True) }}"
+    virtual_image_name_list: "{{ virtual_image_name_list | default(['*ALL']) }}"
+    fix_omit_list: "{{ fix_omit_list | default([]) }}"
+
+  tasks:
+    - name: Install a list of PTFs from image catalog
+      ibm.power_ibmi.ibmi_fix_imgclg:
+        product_id: "{{ product_id }}"
+        src: "{{ src }}"
+        hiper_only: "{{ hiper_only }}"
+        use_temp_path: "{{ use_temp_path }}"
+        rollback: "{{ rollback }}"
+        virtual_image_name_list: "{{ virtual_image_name_list }}"
+        fix_omit_list: "{{ fix_omit_list }}"
+      register: results
+      ignore_errors: yes
+
+    - name: results
+      debug:
+        msg: "{{ results }}"
+        
