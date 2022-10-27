@@ -9,12 +9,18 @@
     command: "{{ command }}"
 
   tasks:
-  - name: command 
+  - name: Run CL Command 
     ibmi_cl_command:
       cmd: "{{ command }}"
       joblog: true
-    register: out
+    register: result
 
-  - name: display command output
+  - name: Display errors
     debug:
-      msg: "{{ out }}"
+      msg: "{{ result.stderr_lines }}"
+    when: result.stderr != ""
+
+  - name: Display output
+    debug:
+      msg: "{{ result.stdout_lines }}"
+    when: result.stdout != ""
