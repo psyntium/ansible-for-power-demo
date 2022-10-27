@@ -1,0 +1,20 @@
+---
+- name: Run CL Commmand
+  hosts: all
+  gather_facts: false
+  collections:
+   - ibm.power_ibmi
+  
+  vars:
+    command: "{{ command }}"
+
+  tasks:
+  - name: command 
+    ibmi_cl_command:
+      cmd: "{{ command }}"
+      joblog: true
+      register: out
+
+  - name: display command output
+    debug:
+      msg: "{{ out }}"

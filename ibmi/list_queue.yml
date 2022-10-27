@@ -1,0 +1,20 @@
+---
+- name: List queue
+  hosts: all
+  gather_facts: false
+  collections:
+   - ibm.power_ibmi
+  
+  vars:
+    queue: "{{ queue }}"
+
+  tasks:
+  - name: WRKOUTQ
+    ibmi_cl_command:
+      cmd: WRKOUTQ
+      joblog: true
+      register: wrkoutq
+
+  - name: display wrkoutq
+    debug:
+      msg: "{{ wrkoutq }}"
