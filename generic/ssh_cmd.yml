@@ -1,0 +1,17 @@
+---
+- name: Run Shell Commmand
+  hosts: all
+  gather_facts: false
+  
+  vars:
+    command: "{{ command }}"
+
+  tasks:
+  - name: command 
+    shell:
+      cmd: "{{ command }}"
+    register: out
+
+  - name: display command output
+    debug:
+      msg: "{{ out }}"
