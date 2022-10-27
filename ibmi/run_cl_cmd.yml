@@ -13,7 +13,7 @@
     ibmi_cl_command:
       cmd: "{{ command }}"
       joblog: true
-      register: out
+    register: out
 
   - name: display command output
     debug:
