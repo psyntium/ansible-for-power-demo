@@ -11,13 +11,32 @@
     lvm_facts:
 
   - name: Set rootvg var
-    ansible.builtin.set_fact:
+    set_fact:
       rootvg: "{{ ansible_facts.LVM.LVs.hd5.vg }}"
 
-  - name: Set hdisk var
-    ansible.builtin.set_fact:
-      hdisk: "{{ ansible_facts.LVM.VGs[rootvg] }}"
+  - name: Set rootvg_facts var
+    set_fact:
+      rootvg_facts: "{{ ansible_facts.LVM.VGs[rootvg] }}"
 
-  - name: Show {{ hdisk }} PV
-    ansible.builtin.debug:
-      var: ansible_facts.LVM.PVs[hdisk]
+  - name: Set pvs var
+    set_fact:
+      pvs: "{{ ansible_facts.LVM.PVs }}"
+
+  - name: Set pvs_by_vg var
+    set_fact: {"pv_{{ item.value }}": "{{ item.key }}"}
+    loop: "{{ ansible_facts.LVM.PVs | dict2items }}"
+
+  - name: Set pvs_by_vg var
+    ansible.builtin.debug: 
+      var: "{{ item.value }} - {{ item.key }}"
+    loop: "{{ ansible_facts.LVM.PVs | dict2items }}"
+
+#   - name: Set hdisk var
+#     set_fact:
+#       rootvg_facts: "{{ ansible_facts.LVM.VGs[rootvg] }}"
+
+# community.general.json_query('domain.server[?cluster==`cluster1`].port') | join(', ') }}"
+
+#   - name: Show {{ hdisk }} PV
+#     ansible.builtin.debug:
+#       var: ansible_facts.LVM.PVs[hdisk]
