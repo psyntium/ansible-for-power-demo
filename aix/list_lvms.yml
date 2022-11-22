@@ -10,6 +10,10 @@
   - name: Gather all lvm facts
     lvm_facts:
 
-  - name: Print all available facts
+  - name: List all VGs
     ansible.builtin.debug:
-      var: ansible_facts.LVM
+      var: ansible_facts.LVM.VGs
+
+  - name: List all PVs
+    ansible.builtin.debug:
+      var: ansible_facts.LVM.PVs
