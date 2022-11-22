@@ -116,7 +116,7 @@
     block:
 
 # SCENARIO 1: Find existing altinst_rootvg or old_rootvg. If found, and number of pv in rootvg == 1, then delete the altdisk
-    - shell: "lspv | grep altinst_rootvg | awk '{ print $1}' | head -n 1"
+    - shell: "lspv | grep -i altinst_rootvg | awk '{ print $1}' | head -n 1"
       register: result
       
     - set_fact:
