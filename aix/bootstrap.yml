@@ -7,8 +7,26 @@
 
   tasks:
 
-  - name: AIX Boostrap
+  - name: AIX Boostrap YUM
     include_role:
       name: power_aix_bootstrap
     vars:
       pkgtype: yum
+
+  - name: AIX Boostrap Python
+    include_role:
+      name: power_aix_bootstrap
+    vars:
+      pkgtype: python
+
+  - name: AIX Boostrap WGET
+    include_role:
+      name: power_aix_bootstrap
+    vars:
+      pkgtype: wget
+
+  - name: AIX Boostrap pycurl
+    include_role:
+      name: power_aix_bootstrap
+    vars:
+      pkgtype: pycurl
