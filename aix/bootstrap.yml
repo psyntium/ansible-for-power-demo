@@ -2,10 +2,13 @@
 - name: AIX Boostrap
   hosts: all
   gather_facts: no
-  include_role:
-    name: power_aix_bootstrap
   collections:
    - ibm.power_aix
-  vars:
-    pkgtype: yum
-    
+
+  tasks:
+
+  - name: AIX Boostrap
+    include_role:
+      name: power_aix_bootstrap
+    vars:
+      pkgtype: yum
