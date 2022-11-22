@@ -28,7 +28,7 @@
 
   - name: print rootvg hdisk
     ansible.builtin.debug: 
-      var: "{{ pv_rootvg }}"
+      var: pv_rootvg
 
 #   - name: Set hdisk var
 #     set_fact:
