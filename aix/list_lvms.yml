@@ -1,0 +1,11 @@
+---
+- name: Gather all lvm facts
+  hosts: all
+  gather_facts: no
+  collections:
+   - ibm.power_aix
+
+  tasks:
+
+  - name: Gather all lvm facts
+    lvm_facts:
