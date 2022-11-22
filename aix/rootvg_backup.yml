@@ -1,0 +1,192 @@
+---
+- name: Gather all lvm facts
+  hosts: all
+  gather_facts: no
+  collections:
+   - ibm.power_aix
+
+# source: https://www.ibm.com/support/pages/updating-new-technology-level-or-service-pack
+
+  tasks:
+
+  - name: Gather all lvm facts
+    lvm_facts:
+
+# First, find out which disk contains your hd5 logical volume.
+
+  - name: Get the rootvg hdisk
+    shell: "lslv -m hd5 | grep hdisk | head -1 | awk '{ print $3}'"
+    register: result
+
+  - set_fact:
+      hdisk: "{{ result.stdout }}"
+
+# Next, verify your boot image can be successfully recreated using the hdisk# from above and by using /dev/ipldevice.
+
+  # - name: Get the rootvg bosboot
+  #   become: yes
+  #   shell: "bosboot -ad /dev/{{ hdisk }}"
+  #   register: result
+
+  # - name: Fail if bosboot throws error
+  #   fail:
+  #     msg: "{{ result.stderr }}"
+  #   when: result.stderr != ""
+
+  # - set_fact:
+  #     hdisk_bosboot: "{{ result.stdout }}"
+
+  # - name: Get the ipldevice bosboot
+  #   become: yes
+  #   shell: "bosboot -ad /dev/ipldevice"
+  #   register: result
+
+  # - name: Fail if bosboot throws error
+  #   fail:
+  #     msg: "{{ result.stderr }}"
+  #   when: result.stderr != ""
+
+  # - set_fact:
+  #     ipldevice_bosboot: "{{ result.stdout }}"
+
+  # - name: print hdisk_bosboot
+  #   ansible.builtin.debug:
+  #     var: hdisk_bosboot
+
+  # - name: print ipldevice_bosboot
+  #   ansible.builtin.debug:
+  #     var: ipldevice_bosboot
+
+# Finally, with the continual introduction of new devices and hardware the boot images are growing larger. 
+# You will want to make sure your hd5 logical volume has enough free and contiguous space to hold the boot image. 
+# Currently the recommended allocated space to have for hd5 is 32meg. 
+# This is of concern in environments with smaller disk sizes, and should be checked before running an update.
+
+# Your hd5 partitions also need to be contiguous partitions. Check this by running the following command :
+# lspv -M hdisk0 |grep hd5
+
+  - name: Check for hdisk contiguous partitions
+    shell: "lspv -M {{ hdisk }} | grep hd5"
+    register: result
+
+  - set_fact:
+      hdisk_partitions: "{{ result.stdout_lines }}"
+
+  - name: print hdisk_partitions
+    debug:
+      var: hdisk_partitions
+
+# Check if got additional disk to perform backup
+
+  - name: Count disks
+    shell: "lspv | wc -l | xargs"
+    register: result
+
+  - set_fact:
+      disk_count: "{{ result.stdout }}"
+
+  - debug: 
+      msg: "Disk Count : {{ disk_count }}"
+
+  - name: End rootvg backup if only 1 disk exists
+    fail:
+      msg: There is no additional disk for backup
+    when: disk_count | int <= 1
+
+# Get empty disk if any
+
+  - name: Get first empty disk
+    block:
+
+    - shell: "lspv | grep none | awk '{ print $1}' | head -n 1"
+      register: result
+
+    - set_fact:
+        hdisk_empty: "{{ result.stdout }}"
+
+    - set_fact:
+        backup_device: "{{ hdisk_empty }}"
+      when: hdisk_empty != ""
+
+    - debug:
+        msg: "Empty device : {{ backup_device }}"
+      when: backup_device is defined 
+
+  - name: Get existing altinst_rootvg
+    block:
+
+# SCENARIO 1: Find existing altinst_rootvg or old_rootvg. If found, and number of pv in rootvg == 1, then delete the altdisk
+    - shell: "lspv | grep altinst_rootvg | awk '{ print $1}' | head -n 1"
+      register: result
+      
+    - set_fact:
+        altinst_rootvg: "{{ result.stdout }}"
+
+    - set_fact:
+        backup_device: "{{ altinst_rootvg }}"
+      when: altinst_rootvg != ""
+
+    - debug:
+        msg: "altinst device : {{ backup_device }}"
+      when: backup_device is defined 
+
+    when: backup_device is not defined
+
+  - name: End rootvg backup if no backup_device defined
+    fail:
+      msg: There is no suitable disk for backup
+    when: backup_device is not defined 
+
+# perform backup
+
+  - debug:
+      msg: "Perform backup of {{ hdisk }} to {{ backup_device }}"
+
+  - name: "Perform backup"
+    become: yes
+    alt_disk:
+      action: copy
+      disk_size_policy: minimize
+      force: true
+    register: copy_result
+
+  - fail:
+      msg: "{{ copy_result.stderr }}"
+    when: copy_result.stderr != ""
+
+  - fail:
+      msg: "{{ copy_result.msg }}"
+    when: copy_result.stderr == "" and copy_result.failed
+
+  - debug:
+      var: copy_result.msg
+    when: copy_result.stderr == ""
+  # - name: Set rootvg var
+  #   set_fact:
+  #     rootvg: "{{ ansible_facts.LVM.LVs.hd5.vg }}"
+
+  # - name: Set rootvg_facts var
+  #   set_fact:
+  #     rootvg_facts: "{{ ansible_facts.LVM.VGs[rootvg] }}"
+
+  # - name: Set pvs var
+  #   set_fact:
+  #     pvs: "{{ ansible_facts.LVM.PVs }}"
+
+  # - name: Set pvs_by_vg var
+  #   set_fact: { "pv_{{ item.value.vg }}": "{{ item.key }}" }
+  #   loop: "{{ ansible_facts.LVM.PVs | dict2items }}"
+
+  # - name: print rootvg hdisk
+  #   ansible.builtin.debug: 
+  #     var: pv_rootvg
+
+#   - name: Set hdisk var
+#     set_fact:
+#       rootvg_facts: "{{ ansible_facts.LVM.VGs[rootvg] }}"
+
+# community.general.json_query('domain.server[?cluster==`cluster1`].port') | join(', ') }}"
+
+#   - name: Show {{ hdisk }} PV
+#     ansible.builtin.debug:
+#       var: ansible_facts.LVM.PVs[hdisk]
