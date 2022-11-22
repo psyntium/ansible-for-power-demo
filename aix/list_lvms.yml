@@ -9,3 +9,7 @@
 
   - name: Gather all lvm facts
     lvm_facts:
+
+  - name: Print all available facts
+    ansible.builtin.debug:
+      var: ansible_facts
