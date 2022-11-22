@@ -23,39 +23,39 @@
 
 # Next, verify your boot image can be successfully recreated using the hdisk# from above and by using /dev/ipldevice.
 
-  # - name: Get the rootvg bosboot
-  #   become: yes
-  #   shell: "bosboot -ad /dev/{{ hdisk }}"
-  #   register: result
+  - name: Get the rootvg bosboot
+    become: yes
+    shell: "bosboot -ad /dev/{{ hdisk }}"
+    register: result
 
-  # - name: Fail if bosboot throws error
-  #   fail:
-  #     msg: "{{ result.stderr }}"
-  #   when: result.stderr != ""
+  - name: Fail if bosboot throws error
+    fail:
+      msg: "{{ result.stderr }}"
+    when: result.stderr != ""
 
-  # - set_fact:
-  #     hdisk_bosboot: "{{ result.stdout }}"
+  - set_fact:
+      hdisk_bosboot: "{{ result.stdout }}"
 
-  # - name: Get the ipldevice bosboot
-  #   become: yes
-  #   shell: "bosboot -ad /dev/ipldevice"
-  #   register: result
+  - name: Get the ipldevice bosboot
+    become: yes
+    shell: "bosboot -ad /dev/ipldevice"
+    register: result
 
-  # - name: Fail if bosboot throws error
-  #   fail:
-  #     msg: "{{ result.stderr }}"
-  #   when: result.stderr != ""
+  - name: Fail if bosboot throws error
+    fail:
+      msg: "{{ result.stderr }}"
+    when: result.stderr != ""
 
-  # - set_fact:
-  #     ipldevice_bosboot: "{{ result.stdout }}"
+  - set_fact:
+      ipldevice_bosboot: "{{ result.stdout }}"
 
-  # - name: print hdisk_bosboot
-  #   ansible.builtin.debug:
-  #     var: hdisk_bosboot
+  - name: print hdisk_bosboot
+    ansible.builtin.debug:
+      var: hdisk_bosboot
 
-  # - name: print ipldevice_bosboot
-  #   ansible.builtin.debug:
-  #     var: ipldevice_bosboot
+  - name: print ipldevice_bosboot
+    ansible.builtin.debug:
+      var: ipldevice_bosboot
 
 # Finally, with the continual introduction of new devices and hardware the boot images are growing larger. 
 # You will want to make sure your hd5 logical volume has enough free and contiguous space to hold the boot image. 
