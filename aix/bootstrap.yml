@@ -5,13 +5,14 @@
   collections:
    - ibm.power_aix
 
-  vars:
-      pkgtype: "{{ pkgtype }}"
-
   tasks:
 
-  - name: "AIX Boostrap {{ pkgtype }}"
+  - name: "AIX Boostrap YUM"
     include_role:
       name: power_aix_bootstrap
     vars:
-      pkgtype: "{{ pkgtype }}"
+      pkgtype: yum
+      download_dir: /repos/aix
+      # target_dir: /tmp
+      # rpm_src: 
+      yum_src: yum-3.4.3-8.aix6.1.noarch.rpm
