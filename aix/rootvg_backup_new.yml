@@ -23,13 +23,12 @@
       pvs: "{{ ansible_facts.LVM.PVs }}"
 
   - name: Set pvs_by_vg var
-    set_fact: {"pv_{{ item.value.vg }}": "{{ item.key }}"}
+    set_fact: { "pv_{{ item.value.vg }}": "{{ item.key }}" }
     loop: "{{ ansible_facts.LVM.PVs | dict2items }}"
 
-  - name: Set pvs_by_vg var
+  - name: print rootvg hdisk
     ansible.builtin.debug: 
-      var: "{{ item.value.vg }} - {{ item.key }}"
-    loop: "{{ ansible_facts.LVM.PVs | dict2items }}"
+      var: "{{ pv_rootvg }}"
 
 #   - name: Set hdisk var
 #     set_fact:
