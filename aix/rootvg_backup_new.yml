@@ -10,25 +10,45 @@
   - name: Gather all lvm facts
     lvm_facts:
 
-  - name: Set rootvg var
-    set_fact:
-      rootvg: "{{ ansible_facts.LVM.LVs.hd5.vg }}"
+  - name: Get the rootvg hdisk
+    shell: "lslv -m hd5 | grep hdisk | head -1 | awk '{ print $3}'"
+    register: hdisk
 
-  - name: Set rootvg_facts var
-    set_fact:
-      rootvg_facts: "{{ ansible_facts.LVM.VGs[rootvg] }}"
+  - name: Get the rootvg bosboot
+    shell: "bosboot -ad /dev/{{ hdisk }}"
+    register: hdisk_bosboot
 
-  - name: Set pvs var
-    set_fact:
-      pvs: "{{ ansible_facts.LVM.PVs }}"
+  - name: Get the rootvg hdisk
+    shell: "bosboot -ad /dev/ipldevice"
+    register: ipldevice_bosboot
 
-  - name: Set pvs_by_vg var
-    set_fact: { "pv_{{ item.value.vg }}": "{{ item.key }}" }
-    loop: "{{ ansible_facts.LVM.PVs | dict2items }}"
+  - name: print hdisk_bosboot
+    ansible.builtin.debug:
+      var: hdisk_bosboot
 
-  - name: print rootvg hdisk
-    ansible.builtin.debug: 
-      var: pv_rootvg
+  - name: print ipldevice_bosboot
+    ansible.builtin.debug:
+      var: ipldevice_bosboot
+
+  # - name: Set rootvg var
+  #   set_fact:
+  #     rootvg: "{{ ansible_facts.LVM.LVs.hd5.vg }}"
+
+  # - name: Set rootvg_facts var
+  #   set_fact:
+  #     rootvg_facts: "{{ ansible_facts.LVM.VGs[rootvg] }}"
+
+  # - name: Set pvs var
+  #   set_fact:
+  #     pvs: "{{ ansible_facts.LVM.PVs }}"
+
+  # - name: Set pvs_by_vg var
+  #   set_fact: { "pv_{{ item.value.vg }}": "{{ item.key }}" }
+  #   loop: "{{ ansible_facts.LVM.PVs | dict2items }}"
+
+  # - name: print rootvg hdisk
+  #   ansible.builtin.debug: 
+  #     var: pv_rootvg
 
 #   - name: Set hdisk var
 #     set_fact:
