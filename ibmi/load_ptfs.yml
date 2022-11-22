@@ -16,7 +16,7 @@
 ---
 - name: Load a list of PTFs
   hosts: all
-  gather_facts: false
+  gather_facts: no
   collections:
    - ibm.power_ibmi
   

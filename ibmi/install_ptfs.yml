@@ -38,7 +38,7 @@
 ---
 - name: Install a list of PTFs from image catalog
   hosts: all
-  gather_facts: false
+  gather_facts: no
   collections:
    - ibm.power_ibmi
   

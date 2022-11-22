@@ -14,7 +14,7 @@
 
 ---
 - hosts: all
-  gather_facts: false
+  gather_facts: no
   collections:
    - ibm.power_ibmi
   

@@ -17,7 +17,7 @@
 
 ---
 - hosts: all
-  gather_facts: false
+  gather_facts: no
   
   vars:
     base_dir: "{{ base_dir | default() }}"

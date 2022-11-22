@@ -11,7 +11,7 @@
 ---
 - name: List all interim fixes (ifix) on the system
   hosts: all
-  gather_facts: false
+  gather_facts: no
   collections:
    - ibm.power_aix
   

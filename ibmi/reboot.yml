@@ -1,7 +1,7 @@
 ---
 - name: Unconditionally reboot the machine with all defaults
   hosts: all
-  gather_facts: false
+  gather_facts: no
   collections:
    - ibm.power_ibmi
   

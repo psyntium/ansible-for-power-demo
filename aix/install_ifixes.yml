@@ -15,7 +15,7 @@
 ---
 - name:  Install list of ifix packages on the system
   hosts: all
-  gather_facts: false
+  gather_facts: no
   collections:
    - ibm.power_aix
   
