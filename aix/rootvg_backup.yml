@@ -98,7 +98,7 @@
   - name: Get first empty disk
     block:
 
-    - shell: "lspv | grep none | awk '{ print $1}' | head -n 1"
+    - shell: "lspv | grep -i none | awk '{ print $1}' | head -n 1"
       register: result
 
     - set_fact:
