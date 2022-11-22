@@ -12,12 +12,12 @@
 
   - name: Set rootvg var
     ansible.builtin.set_fact:
-      rootvg: ansible_facts.LVM.LVs.hd5.vg
+      rootvg: "{{ ansible_facts.LVM.LVs.hd5.vg }}"
 
   - name: Set hdisk var
     ansible.builtin.set_fact:
-      hdisk: ansible_facts.LVM.VGs[{{rootvg}}]
+      hdisk: "{{ ansible_facts.LVM.VGs[rootvg] }}"
 
   - name: Show {{ hdisk }} PV
     ansible.builtin.debug:
-      var: ansible_facts.LVM.PVs[{{hdisk}}]
+      var: ansible_facts.LVM.PVs[hdisk]
