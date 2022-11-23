@@ -1,0 +1,16 @@
+---
+- name: OS level checking
+  hosts: all
+  gather_facts: no
+  collections:
+   - ibm.power_aix
+
+  tasks:
+
+  - name: OS Level
+    shell: "oslevel -s"
+    register: result
+
+  - debug:
+      var: result.stdout
+  
