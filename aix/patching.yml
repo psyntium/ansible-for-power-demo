@@ -6,9 +6,12 @@
    - ibm.power_aix
 
   vars: 
-    action_str: "{{ action_str | default(list_fixes) }}"
-    device: "{{ device | default(/usr/sys/inst.images) }}"
-    install_list: "{{ install_list | default(all) }}"
+    # action_str: "{{ action_str | default(list_fixes) }}"
+    # device: "{{ device | default(/usr/sys/inst.images) }}"
+    # install_list: "{{ install_list | default(all) }}"
+    action_str: "list_fixes"
+    device: "/usr/sys/inst.images"
+    install_list: "all"
 
   tasks:
   - name: Patching
@@ -18,7 +21,12 @@
       device: "{{ device }}"
       install_list: "{{ install_list }}"
       extend_fs: yes
+      updates_only: yes
     register: result
 
+  - fail:
+      msg: "{{ result.stderr }}"
+    when: result.stderr != ""
+
   - debug:
-      var: result
+      var: result.stdout
