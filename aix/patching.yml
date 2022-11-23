@@ -20,7 +20,8 @@
       action: "{{ action_str }}"
       device: "{{ device }}"
       install_list: "{{ install_list }}"
-      dependencies: True
+      dependencies: yes
+      agree_licenses: yes
     register: result
 
   - fail:
