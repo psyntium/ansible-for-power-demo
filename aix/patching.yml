@@ -17,6 +17,7 @@
       action: "{{ action }}"
       device: "{{ device }}"
       install_list: "{{ install_list }}"
+      extend_fs: yes
     register: result
 
   - debug:
