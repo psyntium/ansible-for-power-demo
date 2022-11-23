@@ -20,8 +20,8 @@
       action: "{{ action_str }}"
       device: "{{ device }}"
       install_list: "{{ install_list }}"
-      extend_fs: yes
-      updates_only: yes
+      updates_only: True
+      dependencies: True
     register: result
 
   - fail:
