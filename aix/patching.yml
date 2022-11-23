@@ -1,0 +1,23 @@
+---
+- name: AIX Patching
+  hosts: all
+  gather_facts: no
+  collections:
+   - ibm.power_aix
+
+  vars: 
+    action: "{{ action | default(list_fixes) }}"
+    device: "{{ device | default(/usr/sys/inst.images) }}"
+    install_list: "{{ install_list | default(all) }}"
+
+  tasks:
+  - name: Patching
+    become: yes
+    ibm.power_aix.installp:
+      action: "{{ action }}"
+      device: "{{ device }}"
+      install_list: "{{ install_list }}"
+    register: result
+
+  - debug:
+      var: result
