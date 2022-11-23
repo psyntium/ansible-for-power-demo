@@ -6,7 +6,7 @@
    - ibm.power_aix
 
   vars: 
-    action: "{{ action | default(list_fixes) }}"
+    action_str: "{{ action_str | default(list_fixes) }}"
     device: "{{ device | default(/usr/sys/inst.images) }}"
     install_list: "{{ install_list | default(all) }}"
 
@@ -14,7 +14,7 @@
   - name: Patching
     become: yes
     ibm.power_aix.installp:
-      action: "{{ action }}"
+      action: "{{ action_str }}"
       device: "{{ device }}"
       install_list: "{{ install_list }}"
       extend_fs: yes
