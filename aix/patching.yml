@@ -6,14 +6,29 @@
    - ibm.power_aix
 
   vars: 
-    action_str: "{{ action_str | default(list_fixes) }}"
+    action_str: "{{ action_str | default(apply) }}"
     device: "{{ device | default(/usr/sys/inst.images) }}"
     install_list: "{{ install_list | default(all) }}"
-    # action_str: "list_fixes"
+    # action_str: "apply"
     # device: "/usr/sys/inst.images"
-    # install_list: "all"
+    # install_list: "bos.rte.diag"
 
   tasks:
+
+  - name: OS Level
+    shell: "oslevel -s"
+    register: result
+
+  - debug:
+      var: result.stdout
+
+  - name: LPP Check
+    shell: "lppchk -v"
+    register: result
+
+  - debug:
+      var: result.stdout
+
   - name: Patching
     become: yes
     ibm.power_aix.installp:
@@ -22,10 +37,26 @@
       install_list: "{{ install_list }}"
       agree_licenses: yes
     register: result
+    ignore_errors: yes
 
-  - fail:
-      msg: "{{ result.stderr }}"
+  - debug:
+      var: result.stderr_lines
     when: result.stderr != ""
+
+  - debug:
+      var: result.stdout_lines
+    when: result.stdout != ""
+
+  - name: OS Level
+    shell: "oslevel -s"
+    register: result
+
+  - debug:
+      var: result.stdout
+
+  - name: LPP Check
+    shell: "lppchk -v"
+    register: result
 
   - debug:
       var: result.stdout
